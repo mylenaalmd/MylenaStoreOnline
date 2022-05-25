@@ -1,11 +1,23 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { getCategories } from '../services/api';
 
 class Home extends React.Component {
   state = {
     redirect: false,
     queryInput: '',
+    categories: '',
   }
+
+  componentDidMount() {
+    this.getListCategories();
+  }
+
+  getListCategories = async () => {
+    const categoriesList = await getCategories();
+    this.setState({ categories: categoriesList });
+    console.log(categoriesList);
+  };
 
   handleBtnCart = () => {
     this.setState({
@@ -21,14 +33,28 @@ class Home extends React.Component {
   }
 
   render() {
-    const { redirect, queryInput } = this.state;
+    const { categories, redirect, queryInput } = this.state;
     if (redirect) {
       return (
         <Redirect to="/cart" />
       );
     }
     return (
-      <>
+      <section className="main-content">
+        <div>
+          {categories && categories.map((category) => (
+            <label htmlFor={ category.id } key={ category.id }>
+              {category.name}
+              <input
+                data-testid="category"
+                input="category"
+                type="radio"
+                id={ category.id }
+              />
+            </label>
+
+          ))}
+        </div>
         <h3 data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </h3>
@@ -56,7 +82,7 @@ class Home extends React.Component {
         >
           Pesquisar
         </button>
-      </>
+      </section>
     );
   }
 }
