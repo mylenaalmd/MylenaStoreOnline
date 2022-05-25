@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 class Home extends React.Component {
   state = {
     redirect: false,
+    queryInput: '',
   }
 
   handleBtnCart = () => {
@@ -12,8 +13,15 @@ class Home extends React.Component {
     });
   }
 
+  handleChange = ({ target }) => {
+    const { value, name } = target;
+    this.setState({
+      [name]: value,
+    });
+  }
+
   render() {
-    const { redirect } = this.state;
+    const { redirect, queryInput } = this.state;
     if (redirect) {
       return (
         <Redirect to="/cart" />
@@ -30,6 +38,23 @@ class Home extends React.Component {
           onClick={ this.handleBtnCart }
         >
           Cart
+        </button>
+        <label htmlFor="inputSearch">
+          <input
+            type="query-input"
+            id="query-input"
+            name="queryInput"
+            data-testid="query-input"
+            value={ queryInput }
+            onChange={ this.handleChange }
+          />
+        </label>
+        <button
+          data-testid="query-button"
+          type="button"
+          onClick={ this.handleBtnSearch }
+        >
+          Pesquisar
         </button>
       </>
     );
