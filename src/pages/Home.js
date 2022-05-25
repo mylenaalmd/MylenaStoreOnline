@@ -41,6 +41,7 @@ class Home extends React.Component {
     this.setState({
       [name]: value,
     });
+    // alterando estado
   }
 
   render() {
