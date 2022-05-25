@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
@@ -97,14 +97,20 @@ class Home extends React.Component {
         </button>
         {products[0] && (
           products.map((product) => (
-            <div data-testid="product" key={ product.id }>
-              <p>{ product.title }</p>
-              <img src={ product.thumbnail } alt={ product.title } />
-              <p>
-                Preço:
-                { product.price }
-              </p>
-            </div>
+            <Link
+              to={ `/details/${product.id}` }
+              key={ product.id }
+              data-testid="product-detail-link"
+            >
+              <div data-testid="product">
+                <p>{ product.title }</p>
+                <img src={ product.thumbnail } alt={ product.title } />
+                <p>
+                  Preço:
+                  { product.price }
+                </p>
+              </div>
+            </Link>
           )))}
         {!products[0] && searched && <p>Nenhum produto foi encontrado</p>}
       </section>
