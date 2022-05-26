@@ -44,9 +44,9 @@ class Home extends React.Component {
     // alterando estado
   }
 
-  handleCategorySearch = async ({ target })=>{
+  handleCategorySearch = async ({ target }) => {
     const responseApi = await getProductsFromCategoryAndQuery(target.id, null);
-    const { results }= await responseApi;
+    const { results } = await responseApi;
     this.setState({
       products: results,
       searched: true,
