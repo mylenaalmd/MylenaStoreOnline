@@ -44,6 +44,17 @@ class Home extends React.Component {
     // alterando estado
   }
 
+  handleCategorySearch = async ({ target })=>{
+    const responseApi = await getProductsFromCategoryAndQuery(target.id, null);
+    const { results }= await responseApi;
+    this.setState({
+      products: results,
+      searched: true,
+    });
+    console.log(results);
+    // getProductsFromCategoryAndQuery();
+  }
+
   render() {
     const { categories, redirect, queryInput, products, searched } = this.state;
     if (redirect) {
@@ -62,6 +73,7 @@ class Home extends React.Component {
                 input="category"
                 type="radio"
                 id={ category.id }
+                onClick={ this.handleCategorySearch }
               />
             </label>
 
