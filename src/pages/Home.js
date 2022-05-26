@@ -72,7 +72,7 @@ class Home extends React.Component {
     }
     return (
       <section className="main-content">
-        <div id="categories-content">
+        <div className="categories-content">
           {categories && categories.map((category) => (
             <label htmlFor={ category.id } key={ category.id }>
               {category.name}
