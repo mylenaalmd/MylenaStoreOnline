@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
 class Details extends React.Component {
     state = {
       product: {},
+      productList: [],
+      redirect: false,
     }
-    // depois apagar
 
     async componentDidMount() {
       const { match: { params: { id } } } = this.props;
@@ -17,13 +19,46 @@ class Details extends React.Component {
       });
     }
 
+    handleBtnCart = () => {
+      this.setState({
+        redirect: true,
+      });
+    }
+
+    handleBtnAddCart = () => {
+      const { product, productList } = this.state;
+      productList.push(product);
+      localStorage.setItem('productId', JSON.stringify(productList));
+    }
+
     render() {
-      const { product: { price, thumbnail, title } } = this.state;
+      const { product: { price, thumbnail, title }, redirect } = this.state;
+      if (redirect) {
+        return (
+          <Redirect to="/cart" />
+        );
+      }
       return (
         <div>
           <p data-testid="product-detail-name">{ title }</p>
           <img src={ thumbnail } alt={ title } />
           <p>{ price }</p>
+          <button
+            type="button"
+            data-testid="product-detail-add-to-cart"
+            onClick={ this.handleBtnAddCart }
+          >
+            Adicionar ao Carrinho
+          </button>
+          <div>
+            <button
+              data-testid="shopping-cart-button"
+              type="button"
+              onClick={ this.handleBtnCart }
+            >
+              Carrinho de compras
+            </button>
+          </div>
         </div>
       );
     }
