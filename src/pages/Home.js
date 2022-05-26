@@ -29,6 +29,7 @@ class Home extends React.Component {
     this.setState({ categories: categoriesList });
   };
 
+  // arrumando git
   handleBtnCart = () => {
     this.setState({
       redirect: true,
