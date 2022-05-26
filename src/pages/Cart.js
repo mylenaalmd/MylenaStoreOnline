@@ -12,16 +12,18 @@ componentDidMount() {
 
   getLocalStorageList = () => {
     const productList = JSON.parse(localStorage.getItem('productId'));
-    const quantity = productList.length;
-    // console.log(productList);
-    this.setState({ productList, quantity });
+    if (productList) {
+      const quantity = productList.length;
+      this.setState({ quantity });
+    }
+    this.setState({ productList });
   }
 
   render() {
     const { productList, quantity } = this.state;
     return (
       <div>
-        <h1 data-testid="shopping-cart-product-quantity">{quantity}</h1>
+        {quantity && <h1 data-testid="shopping-cart-product-quantity">{quantity}</h1>}
         <section className="cards-content">
           {productList ? (
             productList.map((product) => (
