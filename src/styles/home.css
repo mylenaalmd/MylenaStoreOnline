@@ -1,0 +1,38 @@
+.main-content{
+    display:flex;
+}
+#categories-content{
+    display:flex;
+    flex-direction:column;
+    width:15%;
+    margin: 1em;
+    border-right: 1px  solid grey;
+}
+.product-card{
+    display:flex;
+    flex-direction:column;
+    width:150px;
+    height:250px;
+    align-content:center;
+    border: 1px solid rgba(128, 128, 128, 0.276);
+}
+.product-card p{
+    display:flex;
+    flex-direction:column;
+    width:150px;
+    height:40px;
+    overflow:scroll;
+    background-color: rgba(128, 128, 128, 0.177);
+}
+.product-card img{
+    display:flex;
+    width:60%;
+}
+.products-content{
+    width: 80%;
+}
+.cards-content{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 3em;
+}
