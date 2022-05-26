@@ -5,6 +5,7 @@ class Details extends React.Component {
     state = {
       product: {},
     }
+    // depois apagar
 
     async componentDidMount() {
       const { match: { params: { id } } } = this.props;
