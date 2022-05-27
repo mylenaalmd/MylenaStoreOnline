@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import QuantityCart from '../components/QuantityCart';
 
 class Cart extends React.Component {
@@ -6,6 +7,7 @@ class Cart extends React.Component {
     productList: '',
     productListReduced: [],
     empty: true,
+    redirect: false,
   };
 
   componentDidMount() {
@@ -53,8 +55,19 @@ class Cart extends React.Component {
     });
   }
 
+  handleBtnCheckout = () => {
+    this.setState({
+      redirect: true,
+    });
+  }
+
   render() {
-    const { productList, productListReduced, empty } = this.state;
+    const { productList, productListReduced, empty, redirect } = this.state;
+    if (redirect) {
+      return (
+        <Redirect to="/checkout" />
+      );
+    }
     return (
       <div>
         <section className="cards-content">
@@ -83,7 +96,7 @@ class Cart extends React.Component {
                   data-testid="product-add-to-cart"
                   // onClick={ () => this.handleBtnCart(product.id) }
                 >
-                  Remover ao Carrinho
+                  Remover do Carrinho
                 </button>
                 <QuantityCart
                   quantityProduct={ productList
@@ -101,6 +114,13 @@ class Cart extends React.Component {
                 Seu carrinho está vazio
               </p>
             )}
+          <button
+            data-testid="checkout-products"
+            type="button"
+            onClick={ this.handleBtnCheckout }
+          >
+            Finalizar compra
+          </button>
         </section>
       </div>
     );
