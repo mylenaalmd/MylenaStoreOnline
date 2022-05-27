@@ -2,32 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class QuantityCart extends React.Component {
-  state = {
-    quantity: 1,
-  }
-
   handleInputQuantity = (e) => {
     e.preventDefault();
   }
 
   handleBtnIncrease = () => {
     const { handleQuantity, id } = this.props;
-    this.setState((previousState) => ({
-      quantity: previousState.quantity + 1,
-    }));
     handleQuantity(id, true);
   }
 
   handleBtnDecrease = () => {
     const { handleQuantity, id } = this.props;
-    this.setState((previousState) => ({
-      quantity: previousState.quantity - 1,
-    }));
     handleQuantity(id, false);
   }
 
   render() {
-    const { quantity } = this.state;
+    const { quantityProduct } = this.props;
     return (
       <div className="increaseDecreaseItem">
         <button
@@ -40,7 +30,7 @@ class QuantityCart extends React.Component {
         <input
           type="text"
           id="inputQuantity"
-          value={ quantity }
+          value={ quantityProduct }
           onChange={ this.handleInputQuantity }
         />
         <button
@@ -58,6 +48,7 @@ class QuantityCart extends React.Component {
 QuantityCart.propTypes = {
   handleQuantity: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
+  quantityProduct: PropTypes.number.isRequired,
 };
 
 export default QuantityCart;

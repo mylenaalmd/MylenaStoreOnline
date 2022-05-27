@@ -14,6 +14,14 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.getListCategories();
+    this.getLocalStorageList();
+  }
+
+  getLocalStorageList = () => {
+    const productList = JSON.parse(localStorage.getItem('productId'));
+    this.setState({
+      storageList: productList,
+    });
   }
 
   getListCategories = async () => {
@@ -44,11 +52,22 @@ class Home extends React.Component {
     });
   }
 
-  handleBtnAddCart = (id) => {
+  handleBtnAddCart = ({ target }) => {
     const { products, storageList } = this.state;
-    const product = products.filter((item) => item.id === id);
-    storageList.push(product[0]);
-    localStorage.setItem('productId', JSON.stringify(storageList));
+    const { name } = target;
+    const product = products.find((item) => item.id === name);
+    if (storageList) {
+      const arr = [...storageList];
+      arr.push(product);
+      return this.setState({ storageList: arr }, () => {
+        localStorage.setItem('productId', JSON.stringify(arr));
+      });
+    }
+    const arr = [];
+    arr.push(product);
+    this.setState({ storageList: arr }, () => {
+      localStorage.setItem('productId', JSON.stringify(arr));
+    });
   }
 
   handleCategorySearch = async ({ target }) => {
@@ -137,7 +156,8 @@ class Home extends React.Component {
                   <button
                     type="button"
                     data-testid="product-add-to-cart"
-                    onClick={ () => this.handleBtnAddCart(product.id) }
+                    name={ product.id }
+                    onClick={ this.handleBtnAddCart }
                   >
                     Adicionar ao Carrinho
                   </button>

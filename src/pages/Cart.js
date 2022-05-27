@@ -1,9 +1,10 @@
 import React from 'react';
-import QuantityCart from '../componentes/QuantityCart';
+import QuantityCart from '../components/QuantityCart';
 
 class Cart extends React.Component {
   state = {
     productList: '',
+    productListReduced: [],
   };
 
   componentDidMount() {
@@ -12,37 +13,57 @@ class Cart extends React.Component {
 
   getLocalStorageList = () => {
     const productList = JSON.parse(localStorage.getItem('productId'));
-    this.setState({ productList });
+    this.setState({ productList }, () => {
+      // Referência: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
+      const arr = productList;
+      const newArr = arr.reduce((acc, current) => {
+        const singleItem = acc.find((item) => item.id === current.id);
+        if (!singleItem) {
+          return acc.concat([current]);
+        }
+        return acc;
+      }, []);
+      this.setState({
+        productListReduced: newArr,
+      });
+    });
   }
 
   handleQuantity = (id, change) => {
     if (change) {
       const { productList } = this.state;
       const productAdd = productList.find((item) => item.id === id);
-      this.setState((previousState) => ({
-        productList: [...previousState.productList, productAdd],
-      }));
-      return localStorage.setItem('productId', JSON.stringify(productList));
+      const arr = [...productList];
+      arr.push(productAdd);
+      return this.setState({ productList: arr }, () => {
+        localStorage.setItem('productId', JSON.stringify(arr));
+      });
     }
     const { productList } = this.state;
-    const productPop = productList.filter((item) => item.id !== id);
-    this.setState({
-      productList: productPop,
+    const arrayItems = productList.filter((item) => item.id === id);
+    arrayItems.shift();
+    const arrayWithouItem = productList.filter((item) => item.id !== id);
+    const arr = [...arrayWithouItem, ...arrayItems];
+    this.setState({ productList: arr }, () => {
+      localStorage.setItem('productId', JSON.stringify(arr));
     });
-    localStorage.setItem('productId', JSON.stringify(productList));
   }
 
   render() {
-    const { productList } = this.state;
+    const { productList, productListReduced } = this.state;
     return (
       <div>
         <section className="cards-content">
-          {productList ? (
-            productList.map((product) => (
+          {productListReduced ? (
+            productListReduced.map((product) => (
               <section key={ product.id } className="product-card">
                 <h1 data-testid="shopping-cart-product-quantity">
                   {
-                    productList.filter((item) => item.id === product.id).length
+                    productList
+                      .filter((item) => item.id === product.id)
+                      .length <= 0 ? 1 : productList
+                        .filter((item) => item.id === product.id)
+                        .length
                   }
                 </h1>
                 <div data-testid="product">
@@ -61,6 +82,11 @@ class Cart extends React.Component {
                   Remover ao Carrinho
                 </button>
                 <QuantityCart
+                  quantityProduct={ productList
+                    .filter((item) => item.id === product.id)
+                    .length <= 0 ? 1 : productList
+                      .filter((item) => item.id === product.id)
+                      .length }
                   id={ product.id }
                   handleQuantity={ this.handleQuantity }
                 />
