@@ -1,33 +1,75 @@
 import React from 'react';
+import QuantityCart from '../components/QuantityCart';
 
 class Cart extends React.Component {
-state = {
-  productList: '',
-  quantity: '',
-};
+  state = {
+    productList: '',
+    productListReduced: [],
+    empty: true,
+  };
 
-componentDidMount() {
-  this.getLocalStorageList();
-}
+  componentDidMount() {
+    this.getLocalStorageList();
+  }
 
   getLocalStorageList = () => {
     const productList = JSON.parse(localStorage.getItem('productId'));
     if (productList) {
-      const quantity = productList.length;
-      this.setState({ quantity });
+      this.setState({ productList }, () => {
+        // Referência: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
+        const arr = productList;
+        const newArr = arr.reduce((acc, current) => {
+          const singleItem = acc.find((item) => item.id === current.id);
+          if (!singleItem) {
+            return acc.concat([current]);
+          }
+          return acc;
+        }, []);
+        this.setState({
+          productListReduced: newArr,
+          empty: false,
+        });
+      });
     }
-    this.setState({ productList });
+  }
+
+  handleQuantity = (id, change) => {
+    if (change) {
+      const { productList } = this.state;
+      const productAdd = productList.find((item) => item.id === id);
+      const arr = [...productList];
+      arr.push(productAdd);
+      return this.setState({ productList: arr }, () => {
+        localStorage.setItem('productId', JSON.stringify(arr));
+      });
+    }
+    const { productList } = this.state;
+    const arrayItems = productList.filter((item) => item.id === id);
+    arrayItems.shift();
+    const arrayWithouItem = productList.filter((item) => item.id !== id);
+    const arr = [...arrayWithouItem, ...arrayItems];
+    this.setState({ productList: arr }, () => {
+      localStorage.setItem('productId', JSON.stringify(arr));
+    });
   }
 
   render() {
-    const { productList, quantity } = this.state;
+    const { productList, productListReduced, empty } = this.state;
     return (
       <div>
-        {quantity && <h1 data-testid="shopping-cart-product-quantity">{quantity}</h1>}
         <section className="cards-content">
-          {productList ? (
-            productList.map((product) => (
+          {!empty ? (
+            productListReduced.map((product) => (
               <section key={ product.id } className="product-card">
+                <h1 data-testid="shopping-cart-product-quantity">
+                  {
+                    productList
+                      .filter((item) => item.id === product.id)
+                      .length <= 0 ? 1 : productList
+                        .filter((item) => item.id === product.id)
+                        .length
+                  }
+                </h1>
                 <div data-testid="product">
                   <img src={ product.thumbnail } alt={ product.title } />
                   <h4>
@@ -43,6 +85,15 @@ componentDidMount() {
                 >
                   Remover ao Carrinho
                 </button>
+                <QuantityCart
+                  quantityProduct={ productList
+                    .filter((item) => item.id === product.id)
+                    .length <= 0 ? 1 : productList
+                      .filter((item) => item.id === product.id)
+                      .length }
+                  id={ product.id }
+                  handleQuantity={ this.handleQuantity }
+                />
               </section>
             )))
             : (
