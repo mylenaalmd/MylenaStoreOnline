@@ -5,6 +5,7 @@ class Cart extends React.Component {
   state = {
     productList: '',
     productListReduced: [],
+    empty: true,
   };
 
   componentDidMount() {
@@ -13,20 +14,23 @@ class Cart extends React.Component {
 
   getLocalStorageList = () => {
     const productList = JSON.parse(localStorage.getItem('productId'));
-    this.setState({ productList }, () => {
-      // Referência: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
-      const arr = productList;
-      const newArr = arr.reduce((acc, current) => {
-        const singleItem = acc.find((item) => item.id === current.id);
-        if (!singleItem) {
-          return acc.concat([current]);
-        }
-        return acc;
-      }, []);
-      this.setState({
-        productListReduced: newArr,
+    if (productList) {
+      this.setState({ productList }, () => {
+        // Referência: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
+        const arr = productList;
+        const newArr = arr.reduce((acc, current) => {
+          const singleItem = acc.find((item) => item.id === current.id);
+          if (!singleItem) {
+            return acc.concat([current]);
+          }
+          return acc;
+        }, []);
+        this.setState({
+          productListReduced: newArr,
+          empty: false,
+        });
       });
-    });
+    }
   }
 
   handleQuantity = (id, change) => {
@@ -50,11 +54,11 @@ class Cart extends React.Component {
   }
 
   render() {
-    const { productList, productListReduced } = this.state;
+    const { productList, productListReduced, empty } = this.state;
     return (
       <div>
         <section className="cards-content">
-          {productListReduced ? (
+          {!empty ? (
             productListReduced.map((product) => (
               <section key={ product.id } className="product-card">
                 <h1 data-testid="shopping-cart-product-quantity">
