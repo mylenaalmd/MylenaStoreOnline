@@ -48,7 +48,6 @@ class Home extends React.Component {
     const { products, storageList } = this.state;
     const product = products.filter((item) => item.id === id);
     storageList.push(product[0]);
-    console.log(storageList);
     localStorage.setItem('productId', JSON.stringify(storageList));
   }
 
@@ -59,7 +58,6 @@ class Home extends React.Component {
       products: results,
       searched: true,
     });
-    console.log(results);
     // getProductsFromCategoryAndQuery();
   }
 
@@ -101,7 +99,7 @@ class Home extends React.Component {
             </button>
             <label htmlFor="inputSearch">
               <input
-                type="query-input"
+                type="text"
                 id="query-input"
                 name="queryInput"
                 data-testid="query-input"

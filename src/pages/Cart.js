@@ -1,33 +1,50 @@
 import React from 'react';
+import QuantityCart from '../componentes/QuantityCart';
 
 class Cart extends React.Component {
-state = {
-  productList: '',
-  quantity: '',
-};
+  state = {
+    productList: '',
+  };
 
-componentDidMount() {
-  this.getLocalStorageList();
-}
+  componentDidMount() {
+    this.getLocalStorageList();
+  }
 
   getLocalStorageList = () => {
     const productList = JSON.parse(localStorage.getItem('productId'));
-    if (productList) {
-      const quantity = productList.length;
-      this.setState({ quantity });
-    }
     this.setState({ productList });
   }
 
+  handleQuantity = (id, change) => {
+    if (change) {
+      const { productList } = this.state;
+      const productAdd = productList.find((item) => item.id === id);
+      this.setState((previousState) => ({
+        productList: [...previousState.productList, productAdd],
+      }));
+      return localStorage.setItem('productId', JSON.stringify(productList));
+    }
+    const { productList } = this.state;
+    const productPop = productList.filter((item) => item.id !== id);
+    this.setState({
+      productList: productPop,
+    });
+    localStorage.setItem('productId', JSON.stringify(productList));
+  }
+
   render() {
-    const { productList, quantity } = this.state;
+    const { productList } = this.state;
     return (
       <div>
-        {quantity && <h1 data-testid="shopping-cart-product-quantity">{quantity}</h1>}
         <section className="cards-content">
           {productList ? (
             productList.map((product) => (
               <section key={ product.id } className="product-card">
+                <h1 data-testid="shopping-cart-product-quantity">
+                  {
+                    productList.filter((item) => item.id === product.id).length
+                  }
+                </h1>
                 <div data-testid="product">
                   <img src={ product.thumbnail } alt={ product.title } />
                   <h4>
@@ -43,6 +60,10 @@ componentDidMount() {
                 >
                   Remover ao Carrinho
                 </button>
+                <QuantityCart
+                  id={ product.id }
+                  handleQuantity={ this.handleQuantity }
+                />
               </section>
             )))
             : (
