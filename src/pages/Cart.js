@@ -120,6 +120,15 @@ class Cart extends React.Component {
             onClick={ this.handleBtnCheckout }
           >
             Finalizar compra
+            {productList && (
+              <h2
+                data-testid="shopping-cart-size"
+              >
+                {productList.length}
+
+              </h2>
+            )}
+
           </button>
         </section>
       </div>

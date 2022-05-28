@@ -14,8 +14,10 @@ class Details extends React.Component {
       const url = `https://api.mercadolibre.com/items/${id}`;
       const response = await fetch(url);
       const data = await response.json();
+      const list = JSON.parse(localStorage.getItem('productId'));
       this.setState({
         product: data,
+        productList: list,
       });
     }
 
@@ -27,12 +29,13 @@ class Details extends React.Component {
 
     handleBtnAddCart = () => {
       const { product, productList } = this.state;
-      productList.push(product);
-      localStorage.setItem('productId', JSON.stringify(productList));
+      const arrayItems = [...productList, product];
+      this.setState({ productList: arrayItems });
+      localStorage.setItem('productId', JSON.stringify(arrayItems));
     }
 
     render() {
-      const { product: { price, thumbnail, title }, redirect } = this.state;
+      const { product: { price, thumbnail, title }, redirect, productList } = this.state;
       if (redirect) {
         return (
           <Redirect to="/cart" />
@@ -49,6 +52,14 @@ class Details extends React.Component {
             onClick={ this.handleBtnAddCart }
           >
             Adicionar ao Carrinho
+            {productList && (
+              <h2
+                data-testid="shopping-cart-size"
+              >
+                {productList.length}
+
+              </h2>
+            )}
           </button>
           <div>
             <button
