@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-const DEFAULT_NUMBER = 4;
-
 class Details extends React.Component {
     state = {
       product: {},
@@ -46,7 +44,7 @@ class Details extends React.Component {
     };
 
     render() {
-      const { product: { price, thumbnail, title }, redirect, productList } = this.state;
+      const { product: { price, thumbnail, title }, redirect } = this.state;
       if (redirect) {
         return (
           <Redirect to="/cart" />
@@ -63,15 +61,13 @@ class Details extends React.Component {
             onClick={ this.handleBtnAddCart }
           >
             Adicionar ao Carrinho
-            {productList && (
-              <h2
-                data-testid="shopping-cart-size"
-              >
-                {JSON.parse(localStorage.getItem('productId'))
-                  ? JSON.parse(localStorage.getItem('productId')).length : DEFAULT_NUMBER}
+            <h2
+              data-testid="shopping-cart-size"
+            >
+              { JSON.parse(localStorage.getItem('productId'))
+              && JSON.parse(localStorage.getItem('productId')).length }
 
-              </h2>
-            )}
+            </h2>
           </button>
           <div>
             <button
