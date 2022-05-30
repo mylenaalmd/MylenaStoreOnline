@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 class Details extends React.Component {
     state = {
       product: {},
-      productList: [],
+      productList: '',
       redirect: false,
     }
 
@@ -14,8 +14,10 @@ class Details extends React.Component {
       const url = `https://api.mercadolibre.com/items/${id}`;
       const response = await fetch(url);
       const data = await response.json();
+      const list = JSON.parse(localStorage.getItem('productId'));
       this.setState({
         product: data,
+        productList: list,
       });
     }
 
@@ -27,9 +29,19 @@ class Details extends React.Component {
 
     handleBtnAddCart = () => {
       const { product, productList } = this.state;
-      productList.push(product);
-      localStorage.setItem('productId', JSON.stringify(productList));
-    }
+      if (productList) {
+        const arr = [...productList];
+        arr.push(product);
+        return this.setState({ productList: arr }, () => {
+          localStorage.setItem('productId', JSON.stringify(arr));
+        });
+      }
+      const arr = [];
+      arr.push(product);
+      this.setState({ productList: arr }, () => {
+        localStorage.setItem('productId', JSON.stringify(arr));
+      });
+    };
 
     render() {
       const { product: { price, thumbnail, title }, redirect } = this.state;
@@ -49,6 +61,13 @@ class Details extends React.Component {
             onClick={ this.handleBtnAddCart }
           >
             Adicionar ao Carrinho
+            <h2
+              data-testid="shopping-cart-size"
+            >
+              { JSON.parse(localStorage.getItem('productId'))
+              && JSON.parse(localStorage.getItem('productId')).length }
+
+            </h2>
           </button>
           <div>
             <button

@@ -29,6 +29,7 @@ class Home extends React.Component {
     this.setState({ categories: categoriesList });
   };
 
+  // arrumando git
   handleBtnCart = () => {
     this.setState({
       redirect: true,
@@ -81,7 +82,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categories, redirect, queryInput, products, searched } = this.state;
+    const { categories,
+      redirect, queryInput, products, searched, storageList } = this.state;
     if (redirect) {
       return (
         <Redirect to="/cart" />
@@ -115,6 +117,14 @@ class Home extends React.Component {
               onClick={ this.handleBtnCart }
             >
               Cart
+              {storageList && (
+                <h2
+                  data-testid="shopping-cart-size"
+                >
+                  {storageList.length}
+
+                </h2>
+              )}
             </button>
             <label htmlFor="inputSearch">
               <input
