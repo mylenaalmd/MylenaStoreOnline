@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import InputRating from '../components/InputRating';
 
 class Details extends React.Component {
     state = {
@@ -28,13 +29,12 @@ class Details extends React.Component {
     }
 
     getLocalStorageEvaluations = () => {
-      const { evaluations } = this.state;
-      if (evaluations[0]) {
+      if (localStorage.getItem('evaluations')) {
         const evaluationsList = JSON.parse(localStorage.getItem('evaluations'));
         return this.setState({ evaluations: evaluationsList, hasEvaluations: true });
       }
       this.setState({
-        evaluations: [{ email: '', mensagem: '', inputRating: '' }],
+        evaluations: [],
       });
     }
 
@@ -77,8 +77,21 @@ class Details extends React.Component {
     handleSubmit = (e) => {
       const { email, mensagem, inputRating, evaluations } = this.state;
       e.preventDefault();
+      if (evaluations) {
+        const obj = { email, mensagem, inputRating };
+        const arr = [...evaluations];
+        arr.push(obj);
+        return this.setState({
+          evaluations: arr,
+          hasEvaluations: true,
+          inputRating: 0,
+          email: '',
+          mensagem: '',
+        }, () => localStorage.setItem('evaluations', JSON.stringify(arr)));
+      }
       const obj = { email, mensagem, inputRating };
-      const arr = [...evaluations, obj];
+      const arr = [];
+      arr.push(obj);
       this.setState({
         evaluations: arr,
         hasEvaluations: true,
@@ -112,7 +125,6 @@ class Details extends React.Component {
             >
               { JSON.parse(localStorage.getItem('productId'))
               && JSON.parse(localStorage.getItem('productId')).length }
-
             </h2>
           </button>
           <div>
@@ -127,55 +139,23 @@ class Details extends React.Component {
           <div>
             <h3>Avaliação</h3>
             <form>
-              <label htmlFor="e-mail">
+              <label htmlFor="email">
                 <input
                   type="email"
+                  id="email"
                   value={ email }
                   name="email"
                   data-testid="product-detail-email"
                   placeholder="E-mail"
                   onChange={ this.handleChange }
                 />
-                <br />
-                <input
-                  type="radio"
-                  value="1"
-                  name="inputRating"
-                  data-testid="1-rating"
-                  onChange={ this.handleChange }
-                />
-                <input
-                  type="radio"
-                  value="2"
-                  name="inputRating"
-                  data-testid="2-rating"
-                  onChange={ this.handleChange }
-                />
-                <input
-                  type="radio"
-                  value="3"
-                  name="inputRating"
-                  data-testid="3-rating"
-                  onChange={ this.handleChange }
-                />
-                <input
-                  type="radio"
-                  value="4"
-                  name="inputRating"
-                  data-testid="4-rating"
-                  onChange={ this.handleChange }
-                />
-                <input
-                  type="radio"
-                  value="5"
-                  name="inputRating"
-                  data-testid="5-rating"
-                  onChange={ this.handleChange }
-                />
               </label>
-              <label htmlFor="e-mail">
+              <br />
+              <InputRating handleChange={ this.handleChange } />
+              <label htmlFor="mensagem">
                 <textarea
                   type="text"
+                  id="mensagem"
                   value={ mensagem }
                   name="mensagem"
                   placeholder="Mensagem (opcional)"
@@ -194,7 +174,7 @@ class Details extends React.Component {
             </form>
             {hasEvaluations && (
               <div className="evaluations">
-                {hasEvaluations && evaluations.map((evaluation) => (
+                {evaluations.map((evaluation) => (
                   <div key={ evaluation.email }>
                     <input
                       type="radio"
@@ -226,12 +206,8 @@ class Details extends React.Component {
                       name={ `inputRated${evaluation.email}` }
                       checked={ evaluation.inputRating === '5' }
                     />
-                    <p>
-                      { evaluation.email }
-                    </p>
-                    <p>
-                      { evaluation.mensagem }
-                    </p>
+                    <p>{ evaluation.email }</p>
+                    <p>{ evaluation.mensagem }</p>
                   </div>
                 ))}
               </div>)}
