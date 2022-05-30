@@ -155,6 +155,8 @@ class Home extends React.Component {
                     data-testid="product-detail-link"
                   >
                     <div data-testid="product">
+                      { product.shipping.free_shipping
+                       && <p data-testid="free-shipping">Frete Grátis</p>}
                       <img src={ product.thumbnail } alt={ product.title } />
                       <h4>
                         Preço:
