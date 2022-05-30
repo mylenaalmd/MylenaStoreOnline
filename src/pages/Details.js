@@ -56,7 +56,8 @@ class Details extends React.Component {
               <h2
                 data-testid="shopping-cart-size"
               >
-                {productList.length}
+                {/* Logica feita para fazer acessar o localStorage na renderização */}
+                {JSON.parse(localStorage.getItem('productId')).length}
 
               </h2>
             )}
