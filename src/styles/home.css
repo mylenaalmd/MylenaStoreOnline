@@ -42,3 +42,13 @@
   flex-wrap: wrap;
   gap: 3em;
 }
+
+.formCheckout {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.formCheckout h1 {
+  text-align: center;
+}
