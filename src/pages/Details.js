@@ -13,6 +13,7 @@ class Details extends React.Component {
       mensagem: '',
       evaluations: [],
       hasEvaluations: false,
+      idItem: '',
     }
 
     async componentDidMount() {
@@ -20,17 +21,18 @@ class Details extends React.Component {
       const url = `https://api.mercadolibre.com/items/${id}`;
       const response = await fetch(url);
       const data = await response.json();
-      const list = JSON.parse(localStorage.getItem('productId'));
+      const list = JSON.parse(localStorage.getItem(id));
       this.setState({
         product: data,
         productList: list,
-      });
-      this.getLocalStorageEvaluations();
+        idItem: id,
+      }, () => this.getLocalStorageEvaluations());
     }
 
     getLocalStorageEvaluations = () => {
-      if (localStorage.getItem('evaluations')) {
-        const evaluationsList = JSON.parse(localStorage.getItem('evaluations'));
+      const { idItem } = this.state;
+      if (localStorage.getItem(idItem)) {
+        const evaluationsList = JSON.parse(localStorage.getItem(idItem));
         return this.setState({ evaluations: evaluationsList, hasEvaluations: true });
       }
       this.setState({
@@ -75,7 +77,7 @@ class Details extends React.Component {
     }
 
     handleSubmit = (e) => {
-      const { email, mensagem, inputRating, evaluations } = this.state;
+      const { email, mensagem, inputRating, evaluations, idItem } = this.state;
       e.preventDefault();
       if (evaluations) {
         const obj = { email, mensagem, inputRating };
@@ -84,10 +86,10 @@ class Details extends React.Component {
         return this.setState({
           evaluations: arr,
           hasEvaluations: true,
-          inputRating: 0,
+          inputRating: null,
           email: '',
           mensagem: '',
-        }, () => localStorage.setItem('evaluations', JSON.stringify(arr)));
+        }, () => localStorage.setItem(idItem, JSON.stringify(arr)));
       }
       const obj = { email, mensagem, inputRating };
       const arr = [];
@@ -95,10 +97,10 @@ class Details extends React.Component {
       this.setState({
         evaluations: arr,
         hasEvaluations: true,
-        inputRating: 0,
+        inputRating: null,
         email: '',
         mensagem: '',
-      }, () => localStorage.setItem('evaluations', JSON.stringify(arr)));
+      }, () => localStorage.setItem(idItem, JSON.stringify(arr)));
     }
 
     render() {
@@ -174,7 +176,7 @@ class Details extends React.Component {
             </form>
             {hasEvaluations && (
               <div className="evaluations">
-                {evaluations.map((evaluation) => (
+                {hasEvaluations && evaluations.map((evaluation) => (
                   <div key={ evaluation.email }>
                     <input
                       type="radio"
