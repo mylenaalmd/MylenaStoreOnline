@@ -83,11 +83,7 @@ class Home extends React.Component {
 
   render() {
     const { categories,
-      redirect,
-      queryInput,
-      products,
-      searched,
-      storageList } = this.state;
+      redirect, queryInput, products, searched, storageList } = this.state;
     if (redirect) {
       return (
         <Redirect to="/cart" />

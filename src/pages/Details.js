@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
+const DEFAULT_NUMBER = 4;
+
 class Details extends React.Component {
     state = {
       product: {},
-      productList: [],
+      productList: '',
       redirect: false,
     }
 
@@ -29,10 +31,19 @@ class Details extends React.Component {
 
     handleBtnAddCart = () => {
       const { product, productList } = this.state;
-      const arrayItems = [...productList, product];
-      this.setState({ productList: arrayItems });
-      localStorage.setItem('productId', JSON.stringify(arrayItems));
-    }
+      if (productList) {
+        const arr = [...productList];
+        arr.push(product);
+        return this.setState({ productList: arr }, () => {
+          localStorage.setItem('productId', JSON.stringify(arr));
+        });
+      }
+      const arr = [];
+      arr.push(product);
+      this.setState({ productList: arr }, () => {
+        localStorage.setItem('productId', JSON.stringify(arr));
+      });
+    };
 
     render() {
       const { product: { price, thumbnail, title }, redirect, productList } = this.state;
@@ -56,8 +67,8 @@ class Details extends React.Component {
               <h2
                 data-testid="shopping-cart-size"
               >
-                {/* Logica feita para fazer acessar o localStorage na renderização */}
-                {JSON.parse(localStorage.getItem('productId')).length}
+                {JSON.parse(localStorage.getItem('productId'))
+                  ? JSON.parse(localStorage.getItem('productId')).length : DEFAULT_NUMBER}
 
               </h2>
             )}
