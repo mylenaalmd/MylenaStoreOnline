@@ -104,6 +104,9 @@ class Cart extends React.Component {
                     .length <= 0 ? 1 : productList
                       .filter((item) => item.id === product.id)
                       .length }
+                  max={ productList
+                    .filter((item) => item.id === product.id)
+                    .length === product.available_quantity && 'max' }
                   id={ product.id }
                   handleQuantity={ this.handleQuantity }
                 />

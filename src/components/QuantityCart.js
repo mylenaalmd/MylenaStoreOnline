@@ -6,7 +6,11 @@ class QuantityCart extends React.Component {
     e.preventDefault();
   }
 
-  handleBtnIncrease = () => {
+  handleBtnIncrease = ({ target }) => {
+    const { value } = target;
+    if (value === 'max') {
+      return;
+    }
     const { handleQuantity, id } = this.props;
     handleQuantity(id, true);
   }
@@ -17,7 +21,7 @@ class QuantityCart extends React.Component {
   }
 
   render() {
-    const { quantityProduct } = this.props;
+    const { quantityProduct, max } = this.props;
     return (
       <div className="increaseDecreaseItem">
         <button
@@ -35,6 +39,7 @@ class QuantityCart extends React.Component {
         />
         <button
           type="button"
+          value={ max }
           onClick={ this.handleBtnIncrease }
           data-testid="product-increase-quantity"
         >
@@ -49,6 +54,11 @@ QuantityCart.propTypes = {
   handleQuantity: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   quantityProduct: PropTypes.number.isRequired,
+  max: PropTypes.string,
+};
+
+QuantityCart.defaultProps = {
+  max: '',
 };
 
 export default QuantityCart;
