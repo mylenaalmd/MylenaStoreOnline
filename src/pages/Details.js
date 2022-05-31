@@ -16,8 +16,12 @@ class Details extends React.Component {
       idItem: '',
     }
 
-    async componentDidMount() {
+    componentDidMount() {
       this.getLocalStorageEvaluations();
+      this.getLocal();
+    }
+
+    getLocal = async () => {
       const { match: { params: { id } } } = this.props;
       const url = `https://api.mercadolibre.com/items/${id}`;
       const response = await fetch(url);
@@ -31,9 +35,9 @@ class Details extends React.Component {
     }
 
     getLocalStorageEvaluations = () => {
-      const { idItem } = this.state;
-      if (localStorage.getItem(idItem)) {
-        const evaluationsList = JSON.parse(localStorage.getItem(idItem));
+      const { match: { params: { id } } } = this.props;
+      if (localStorage.getItem(id)) {
+        const evaluationsList = JSON.parse(localStorage.getItem(id));
         return this.setState({ evaluations: evaluationsList, hasEvaluations: true });
       }
       this.setState({
