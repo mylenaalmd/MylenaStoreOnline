@@ -52,6 +52,7 @@ class Details extends React.Component {
     }
 
     handleBtnAddCart = () => {
+      // changing
       const { product, productList } = this.state;
       if (productList) {
         const arr = [...productList];
