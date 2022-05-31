@@ -107,24 +107,33 @@ class Home extends React.Component {
           ))}
         </div>
         <section className="products-content">
-          <section className="search-bar">
+          <div className="cart-text">
             <h3 data-testid="home-initial-message">
               Digite algum termo de pesquisa ou escolha uma categoria.
             </h3>
+            <div>
+              <span className="material-symbols-outlined">
+                shopping_cart
+              </span>
+              <div className="count-cart">
+                {storageList && (
+                  <h2
+                    data-testid="shopping-cart-size"
+                  >
+                    {storageList.length}
+
+                  </h2>
+                )}
+              </div>
+            </div>
+          </div>
+          <section className="search-bar">
             <button
               data-testid="shopping-cart-button"
               type="button"
               onClick={ this.handleBtnCart }
             >
               Cart
-              {storageList && (
-                <h2
-                  data-testid="shopping-cart-size"
-                >
-                  {storageList.length}
-
-                </h2>
-              )}
             </button>
             <label htmlFor="inputSearch">
               <input

@@ -1,0 +1,33 @@
+.material-symbols-outlined {
+    font-size: 50px;
+  }
+  
+  .count-cart {
+    border-radius: 100%;
+    text-align: center;
+    position: absolute;
+    top: 5px;
+    height: 30px;
+    width: 30px;
+  }
+
+  .count-cart h2{
+    background-color: yellow;
+    border-radius: 100%;
+    color: black;
+    text-align: center;
+    position: absolute;
+    margin-left: 30px;
+    height: 30px;
+    width: 30px;
+  }
+
+  .cart-text {
+      display: flex;
+      justify-content: space-between;
+  }
+
+  .cart-detail {
+    position: absolute;
+    right: 25px;
+  }
