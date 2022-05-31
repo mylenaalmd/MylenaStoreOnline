@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import Header from '../components/Header';
 import InputRating from '../components/InputRating';
+import Footer from '../components/Footer';
 
 class Details extends React.Component {
     state = {
@@ -118,20 +120,8 @@ class Details extends React.Component {
         );
       }
       return (
-        <div>
-          <div className="cart-detail">
-            <span className="material-symbols-outlined">
-              shopping_cart
-            </span>
-            <div className="count-cart">
-              <h2
-                data-testid="shopping-cart-size"
-              >
-                { JSON.parse(localStorage.getItem('productId'))
-              && JSON.parse(localStorage.getItem('productId')).length }
-              </h2>
-            </div>
-          </div>
+        <>
+          <Header storageList={ JSON.parse(localStorage.getItem('productId')) } />
           <p data-testid="product-detail-name">{ title }</p>
           <img src={ thumbnail } alt={ title } />
           <p>{ price }</p>
@@ -230,7 +220,8 @@ class Details extends React.Component {
                 ))}
               </div>)}
           </div>
-        </div>
+          <Footer />
+        </>
       );
     }
 }

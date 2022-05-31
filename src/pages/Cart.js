@@ -1,5 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import QuantityCart from '../components/QuantityCart';
 
 class Cart extends React.Component {
@@ -69,72 +71,76 @@ class Cart extends React.Component {
       );
     }
     return (
-      <div>
-        <section className="cards-content">
-          {!empty ? (
-            productListReduced.map((product) => (
-              <section key={ product.id } className="product-card">
-                <h1 data-testid="shopping-cart-product-quantity">
-                  {
-                    productList
+      <>
+        <div className="main-content">
+          <Header storageList={ productList } />
+          <section className="cards-content">
+            {!empty ? (
+              productListReduced.map((product) => (
+                <section key={ product.id } className="product-card">
+                  <h1 data-testid="shopping-cart-product-quantity">
+                    {
+                      productList
+                        .filter((item) => item.id === product.id)
+                        .length <= 0 ? 1 : productList
+                          .filter((item) => item.id === product.id)
+                          .length
+                    }
+                  </h1>
+                  <div data-testid="product">
+                    <img src={ product.thumbnail } alt={ product.title } />
+                    <h4>
+                      Preço:
+                      { product.price }
+                    </h4>
+                    <p data-testid="shopping-cart-product-name">{ product.title }</p>
+                  </div>
+                  <button
+                    type="button"
+                    data-testid="product-add-to-cart"
+                  // onClick={ () => this.handleBtnCart(product.id) }
+                  >
+                    Remover do Carrinho
+                  </button>
+                  <QuantityCart
+                    quantityProduct={ productList
                       .filter((item) => item.id === product.id)
                       .length <= 0 ? 1 : productList
                         .filter((item) => item.id === product.id)
-                        .length
-                  }
-                </h1>
-                <div data-testid="product">
-                  <img src={ product.thumbnail } alt={ product.title } />
-                  <h4>
-                    Preço:
-                    { product.price }
-                  </h4>
-                  <p data-testid="shopping-cart-product-name">{ product.title }</p>
-                </div>
-                <button
-                  type="button"
-                  data-testid="product-add-to-cart"
-                  // onClick={ () => this.handleBtnCart(product.id) }
-                >
-                  Remover do Carrinho
-                </button>
-                <QuantityCart
-                  quantityProduct={ productList
-                    .filter((item) => item.id === product.id)
-                    .length <= 0 ? 1 : productList
+                        .length }
+                    max={ productList
                       .filter((item) => item.id === product.id)
-                      .length }
-                  max={ productList
-                    .filter((item) => item.id === product.id)
-                    .length === product.available_quantity && 'max' }
-                  id={ product.id }
-                  handleQuantity={ this.handleQuantity }
-                />
-              </section>
-            )))
-            : (
-              <p data-testid="shopping-cart-empty-message">
-                Seu carrinho está vazio
-              </p>
-            )}
-          <button
-            data-testid="checkout-products"
-            type="button"
-            onClick={ this.handleBtnCheckout }
-          >
-            Finalizar compra
-            {productList && (
-              <h2
-                data-testid="shopping-cart-size"
-              >
-                {productList.length}
+                      .length === product.available_quantity && 'max' }
+                    id={ product.id }
+                    handleQuantity={ this.handleQuantity }
+                  />
+                </section>
+              )))
+              : (
+                <p data-testid="shopping-cart-empty-message">
+                  Seu carrinho está vazio
+                </p>
+              )}
+            <button
+              data-testid="checkout-products"
+              type="button"
+              onClick={ this.handleBtnCheckout }
+            >
+              Finalizar compra
+              {productList && (
+                <h2
+                  data-testid="shopping-cart-size"
+                >
+                  {productList.length}
 
-              </h2>
-            )}
+                </h2>
+              )}
 
-          </button>
-        </section>
-      </div>
+            </button>
+          </section>
+        </div>
+        <Footer />
+      </>
     );
   }
 }
