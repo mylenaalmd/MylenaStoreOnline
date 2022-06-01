@@ -1,0 +1,35 @@
+header {
+    padding: 2em;
+    background-color: rgb(32, 141, 244);
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+}
+
+.login-cart {
+    display: flex;
+    gap: 2em
+}
+/* https://wdexplorer.com/20-examples-beautiful-css-typography-design/ */
+header h1 { 
+    color: #ffffff;
+    font-family: 'Raleway',sans-serif; 
+    font-size: 62px; 
+    font-weight: 800; 
+    line-height: 72px; 
+    margin: 0 0 24px; 
+    text-align: center; 
+    text-transform: uppercase; 
+    text-shadow: 1px 1px 30px rgb(76, 74, 74);
+}
+
+header p { 
+    color: #ffffff;
+    font-family: 'Raleway'; 
+    font-size: 30px; 
+    font-weight: 800; 
+    line-height: 72px; 
+    margin: 0 0 24px; 
+    text-align: center; 
+    text-shadow: 1px 1px 30px rgb(76, 74, 74);
+    text-transform: uppercase; 
+}
+

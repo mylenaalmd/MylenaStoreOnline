@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import Header from '../components/Header';
 import InputRating from '../components/InputRating';
+import Footer from '../components/Footer';
 
 class Details extends React.Component {
     state = {
@@ -118,7 +120,8 @@ class Details extends React.Component {
         );
       }
       return (
-        <div>
+        <>
+          <Header storageList={ JSON.parse(localStorage.getItem('productId')) } />
           <p data-testid="product-detail-name">{ title }</p>
           <img src={ thumbnail } alt={ title } />
           <p>{ price }</p>
@@ -128,12 +131,6 @@ class Details extends React.Component {
             onClick={ this.handleBtnAddCart }
           >
             Adicionar ao Carrinho
-            <h2
-              data-testid="shopping-cart-size"
-            >
-              { JSON.parse(localStorage.getItem('productId'))
-              && JSON.parse(localStorage.getItem('productId')).length }
-            </h2>
           </button>
           <div>
             <button
@@ -190,12 +187,15 @@ class Details extends React.Component {
                       name={ `inputRated${evaluation.email}` }
                       checked={ evaluation.inputRating === '1' }
                     />
-                    <input
-                      type="radio"
-                      value="2"
-                      name={ `inputRated${evaluation.email}` }
-                      checked={ evaluation.inputRating === '2' }
-                    />
+                    <label htmlFor="radio-two">
+                      <input
+                        id="radio-two"
+                        type="radio"
+                        value="2"
+                        name={ `inputRated${evaluation.email}` }
+                        checked={ evaluation.inputRating === '2' }
+                      />
+                    </label>
                     <input
                       type="radio"
                       value="3"
@@ -220,7 +220,8 @@ class Details extends React.Component {
                 ))}
               </div>)}
           </div>
-        </div>
+          <Footer />
+        </>
       );
     }
 }

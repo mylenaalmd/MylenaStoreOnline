@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './styles/home.css';
+import './styles/cart-style.css';
+import './styles/header.css';
+import './styles/footer.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
