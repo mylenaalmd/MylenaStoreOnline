@@ -5,7 +5,8 @@ class Footer extends React.Component {
     return (
       <footer className="cart-text">
         <span>
-          &copy; Todos os direitos reservados Grupo 26 - Projeto da Trybe - André, Lucas, Flávia, Mylena e Rafael.
+          &copy; Todos os direitos reservados Grupo
+          26 - Projeto da Trybe - André, Lucas, Flávia, Mylena e Rafael.
         </span>
       </footer>
     );
